@@ -53,9 +53,22 @@ function hello_block_view($delta = '') {
       
     case 'user_info':
       
-      print_r($_GET);
-      $block['subject'] = t('User Info');
-      $block['content'] = t('Testing');
+      if (arg(0) == 'user' && is_numeric(arg(1))) {
+        $account = user_load(arg(1));
+        if (!empty($account)) {
+          $block['subject'] = t('User Info');
+          $output = '';
+          $output .= '<div><label>' . t('Name') . '</label>' . $account->name . '</div>';
+          $output .= '<div><label>' . t('Email') . '</label>' . $account->mail . '</div>';
+          $output .= '<div><label>' . t('Created') . '</label>' . format_date($account->created) . '</div>';
+          $access = ($account->access == 0) ? t('Never') : format_date($account->access);
+          $output .= '<div><label>' . t('Last Access') . '</label>' . $access . '</div>';
+          
+          $block['content'] = $output;
+        }
+        
+      }
+      
       break;
   }
   
