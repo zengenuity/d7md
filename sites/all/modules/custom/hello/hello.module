@@ -54,7 +54,6 @@ function hello_block_view($delta = '') {
     case 'user_info':
       
       print_r($_GET);
-      
       $block['subject'] = t('User Info');
       $block['content'] = t('Testing');
       break;
