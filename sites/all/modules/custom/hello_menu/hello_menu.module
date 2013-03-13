@@ -1,0 +1,19 @@
+<?php
+
+function hello_menu_menu() {
+  $items = array();
+  
+  $items['hello'] = array(
+    'title' => 'Hello World',
+    'page callback' => 'hello_menu_simple_hello',
+    'access arguments' => array('access content'),
+    'menu_name' => 'main-menu',
+    'weight' => 1,
+  );
+  
+  return $items;
+}
+
+function hello_menu_simple_hello() {
+  return t('Hello world!!');
+}
