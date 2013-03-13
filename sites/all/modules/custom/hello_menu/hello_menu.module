@@ -11,7 +11,28 @@ function hello_menu_menu() {
     'weight' => 1,
   );
   
+  $items['variables'] = array(
+    'title' => 'Hello Variables',
+    'page callback' => 'hello_menu_list_variables',
+    'access arguments' => array('access content'),
+    'menu_name' => 'main-menu',
+    'weight' => 2,
+  );
+  
   return $items;
+}
+
+function hello_menu_list_variables() {
+  $variables = variable_initialize();
+  $names = array_keys($variables);
+  $output = '<ul>';
+  
+  foreach ($names as $name) {
+    $output .= '<li>' . $name . '</li>';
+  }
+  
+  $output .= '</ul>';
+  return $output;
 }
 
 function hello_menu_simple_hello() {
