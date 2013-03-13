@@ -15,11 +15,22 @@ function hello_menu_menu() {
     'title' => 'Hello Variables',
     'page callback' => 'hello_menu_list_variables',
     'access arguments' => array('access content'),
-    'menu_name' => 'main-menu',
-    'weight' => 2,
+    'menu_name' => 'navigation',
+  );
+  
+  $items['variables/site_name'] = array(
+    'title' => 'Hello Variables: Site Name',
+    'page callback' => 'hello_menu_show_variable',
+    'access arguments' => array('access content'),
+    'menu_name' => 'navigation',
   );
   
   return $items;
+}
+
+function hello_menu_show_variable() {
+  $value = variable_get('site_name', t('No value for this variable.'));
+  return $value;
 }
 
 function hello_menu_list_variables() {
