@@ -5,6 +5,7 @@ function hello_menu_menu() {
   
   $items['hello'] = array(
     'title' => 'Hello World',
+    'description' => 'This is where say hello!',
     'page callback' => 'hello_menu_simple_hello',
     'access arguments' => array('access content'),
     'menu_name' => 'main-menu',
@@ -24,23 +25,42 @@ function hello_menu_menu() {
     'type' => MENU_LOCAL_TASK,
   );
   
-  $items['hello/variables/%'] = array(
-    'title callback' => 'hello_menu_show_variable_title',
-    'title arguments' => array(2),
-    'page callback' => 'hello_menu_show_variable',
-    'page arguments' => array(2),
-    'access arguments' => array('access content'),
-    'menu_name' => 'navigation',
+  $items['hello/variables/list'] = array(
+    'title' => 'List',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
   );
   
   $items['hello/variables/create'] = array(
     'title' => 'Create Variable',
     'page callback' => 'hello_menu_create_variable',
     'access arguments' => array('access content'),
-    'type' => MENU_LOCAL_ACTION,
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 1,
+  );
+  
+  $items['hello/variables/delete'] = array(
+    'title' => 'Delete Variable',
+    'page callback' => 'hello_menu_delete_variable',
+    'access arguments' => array('access content'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 2,
+  );
+  
+  
+  $items['hello/variables/%'] = array(
+    'title callback' => 'hello_menu_show_variable_title',
+    'title arguments' => array(2),
+    'page callback' => 'hello_menu_show_variable',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
   );
   
   return $items;
+}
+
+function hello_menu_delete_variable() {
+  return t('This is where we delete variables.');
 }
 
 function hello_menu_create_variable() {
