@@ -7,6 +7,7 @@ function node_metadata_menu() {
     'title' => 'Metadata',
     'page callback' => 'node_metadata_page',
     'page arguments' => array(1),
+    'access callback' => 'user_access',
     'access arguments' => array('view node metadata'),
     'file' => 'node_metadata.pages.inc',
     'file path' => drupal_get_path('module', 'node_metadata') . '/includes',

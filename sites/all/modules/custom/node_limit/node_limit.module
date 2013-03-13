@@ -1,0 +1,49 @@
+<?php
+
+function node_limit_menu() {
+  $items = array();
+  
+  $items['node/%node/edit-locked'] = array(
+    'title' => 'Updates locked',
+    'page callback' => 'node_limit_locked_page',
+    'access callback' => 'node_limit_node_locked_access',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => -1,
+  );
+  
+  return $items;
+}
+
+function node_limit_locked_page() {
+  return t('This node is locked.');
+}
+
+function node_limit_menu_alter(&$items) {
+  $items['node/%node/edit']['title callback'] = 'node_limit_node_edit_title';
+  $items['node/%node/edit']['title arguments'] = array(1);
+  $items['node/%node/edit']['weight'] = -1;
+  $items['node/%node/edit']['access callback'] = 'node_limit_node_edit_access';
+  $items['node/%node/edit']['access arguments'] = array(1);
+}
+
+function node_limit_node_edit_title($node) {
+  $time_diff = REQUEST_TIME - $node->changed;
+  $time_left = ceil(((15 * 60) - $time_diff) / 60);
+  
+  return t('Update (@time minutes left)', array('@time' => $time_left));
+}
+
+function node_limit_node_edit_access($node) {
+  if ($node->changed > (REQUEST_TIME - 15 * 60)) {
+    return node_access("update", $node);
+  }
+  return FALSE;
+}
+
+function node_limit_node_locked_access($node) {
+  if ($node->changed > (REQUEST_TIME - 15 * 60)) {
+    return FALSE;
+  }
+  return node_access('update', $node);
+}
