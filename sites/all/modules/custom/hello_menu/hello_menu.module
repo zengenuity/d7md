@@ -18,9 +18,11 @@ function hello_menu_menu() {
     'menu_name' => 'navigation',
   );
   
-  $items['variables/site_name'] = array(
-    'title' => 'Hello Variables: Site Name',
+  $items['variables/%'] = array(
+    'title callback' => 'hello_menu_show_variable_title',
+    'title arguments' => array(1),
     'page callback' => 'hello_menu_show_variable',
+    'page arguments' => array(1),
     'access arguments' => array('access content'),
     'menu_name' => 'navigation',
   );
@@ -28,8 +30,12 @@ function hello_menu_menu() {
   return $items;
 }
 
-function hello_menu_show_variable() {
-  $value = variable_get('site_name', t('No value for this variable.'));
+function hello_menu_show_variable_title($variable_name) {
+  return t('Show Variable: @name', array('@name' => $variable_name));
+}
+
+function hello_menu_show_variable($variable_name) {
+  $value = variable_get($variable_name, t('No value for this variable.'));
   return $value;
 }
 
@@ -39,7 +45,7 @@ function hello_menu_list_variables() {
   $output = '<ul>';
   
   foreach ($names as $name) {
-    $output .= '<li>' . $name . '</li>';
+    $output .= '<li>' . l($name, 'variables/' . $name, array('attributes' => array('class' => array('test-link', 'other-link')))) . '</li>';
   }
   
   $output .= '</ul>';
