@@ -72,11 +72,10 @@ function hamsters_menu() {
 }
 
 function hamsters_oo_delete() {
-  db_query("DELETE FROM {hamsters} WHERE name = :name", 
-    array(
-      ':name' => 'Test',
-    )
-  );
+  db_delete('hamsters')
+    ->condition('name', 'Test')
+    ->execute();
+  
   return t('Deleted');
 }
 
