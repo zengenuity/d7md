@@ -10,7 +10,34 @@ function hamsters_menu() {
     'access arguments' => array('view hamsters'),
   );
   
+  $items['hamsters/%hamster'] = array(
+    'title callback' => 'hamsters_page_title',
+    'title arguments' => array(1),
+    'page callback' => 'hamsters_page',
+    'page arguments' => array(1),
+    'access arguments' => array('view hamsters'),
+  );
+  
   return $items;
+}
+
+function hamsters_page($hamster) {
+  $output = '<div class="hamster-page">';
+  
+  $output .= '<label class="inline">' . t('ID') . ':</label>' . $hamster->id;
+  
+  $output .= '</div>';
+  return $output;
+}
+
+function hamsters_page_title($hamster) {
+  return $hamster->name;
+}
+
+function hamster_load($id) {
+  return db_query("SELECT h.*, hh.name as habitat_name FROM {hamsters} h
+                   LEFT JOIN {hamsters_habitat} hh ON h.habitat_id = hh.id
+                   WHERE h.id = :hamster_id", array(':hamster_id' => $id))->fetchObject();
 }
 
 function hamsters_list() {
