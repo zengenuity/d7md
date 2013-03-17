@@ -36,7 +36,54 @@ function hamsters_menu() {
     'access arguments' => array('edit hamsters'),
   );
   
+  $items['hamsters-oo'] = array(
+    'title' => 'Hamsters',
+    'page callback' => 'hamsters_oo_list',
+    'access arguments' => array('view hamsters'),
+  );
+  
   return $items;
+}
+
+function hamsters_oo_list() {
+  $output = '';
+  $header = array(
+    t('ID'),
+    t('Name'),
+    t('Gender'),
+    t('Weight'),
+    t('Birth Date'),
+    t('Image'),
+    t('Habitat'),
+  );
+  $rows = array();
+  //$per_page = 10;
+  //$total = db_query("SELECT COUNT(*) FROM {hamsters}")->fetchField();
+  //$page = pager_default_initialize($total, $per_page);
+  
+  $query = db_select('hamsters', 'h');
+  $query->join('hamsters_habitat', 'hh', 'h.habitat_id = hh.id');
+  $query->fields('h');
+  $query->addField('hh', 'name', 'habitat_name');
+  $results = $query->execute();
+  
+  foreach ($results as $record) {
+    $row = array(
+      $record->id,
+      l($record->name, 'hamsters/' . $record->id),
+      $record->gender,
+      t('@weight g', array('@weight' => $record->weight)),
+      format_date($record->birthdate, 'custom', 'm/d/Y'),
+      !empty($record->image) ? theme('image_style', array('path' => file_build_uri($record->image), 'style_name' => 'thumbnail')) : '&nbsp',
+      $record->habitat_name,
+    );
+    $rows[] = $row;
+  }
+  $output .= theme('table', array('header' => $header, 'rows' => $rows));
+  //$output .= theme('pager');
+  
+  
+  return $output;
 }
 
 function hamsters_delete() {
