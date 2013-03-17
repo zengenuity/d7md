@@ -26,16 +26,17 @@ function hamsters_list() {
   );
   $rows = array();
   
-  $results = db_query("SELECT * FROM {hamsters}");
+  $results = db_query("SELECT h.*, hh.name as habitat_name FROM {hamsters} h
+                       LEFT JOIN {hamsters_habitat} hh ON h.habitat_id = hh.id");
   foreach ($results as $record) {
     $row = array(
       $record->id,
       $record->name,
       $record->gender,
-      $record->weight,
-      $record->birthdate,
+      t('@weight g', array('@weight' => $record->weight)),
+      format_date($record->birthdate, 'custom', 'm/d/Y'),
       $record->image,
-      $record->habitat_id,
+      $record->habitat_name,
     );
     $rows[] = $row;
   }
