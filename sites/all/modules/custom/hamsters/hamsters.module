@@ -67,9 +67,46 @@ function hamsters_menu() {
     'access arguments' => array('edit hamsters'),
   );
   
+  $items['hamsters-write/insert'] = array(
+    'title' => 'DB Insert',
+    'page callback' => 'hamsters_write_insert',
+    'access arguments' => array('edit hamsters'),
+  );
+  
+  $items['hamsters-write/update'] = array(
+    'title' => 'DB Update',
+    'page callback' => 'hamsters_write_update',
+    'access arguments' => array('edit hamsters'),
+  );
+  
   
   return $items;
 }
+
+function hamsters_write_update() {
+  $hamster = array(
+    'id' => 23,
+    'habitat_id' => 1,
+  );
+  drupal_write_record('hamsters', $hamster, array('id'));
+  return t('Updated');
+}
+
+function hamsters_write_insert() {
+  $hamster = array(
+    'name' => 'Test',
+    'gender' => 'male',
+    'weight' => 150,
+    'birthdate' => REQUEST_TIME,
+    'image' => '',
+    'habitat_id' => 3,
+  );
+  
+  drupal_write_record('hamsters', $hamster);
+
+  return t('Done');
+}
+
 
 function hamsters_oo_delete() {
   db_delete('hamsters')
