@@ -21,7 +21,17 @@ function hamsters_menu() {
   return $items;
 }
 
-function hamsters_page($hamster) {
+function hamsters_theme() {
+  return array(
+    'hamster_info' => array(
+      'variables' => array('hamster' => NULL),
+    ),
+  );
+}
+
+function theme_hamster_info($variables) {
+  $hamster = $variables['hamster'];
+  
   drupal_add_css(drupal_get_path('module', 'hamsters') . '/hamsters.css');
   $output = '<div class="hamster-page">';
   
@@ -38,6 +48,10 @@ function hamsters_page($hamster) {
   
   $output .= '</div>';
   return $output;
+}
+
+function hamsters_page($hamster) {
+  return theme('hamster_info', array('hamster' => $hamster));
 }
 
 function hamsters_page_title($hamster) {
