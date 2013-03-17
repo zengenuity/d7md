@@ -1,0 +1,27 @@
+<?php
+
+
+function hamsters_menu() {
+  $items = array();
+  
+  $items['hamsters'] = array(
+    'title' => 'Hamsters',
+    'page callback' => 'hamsters_list',
+    'access arguments' => array('view hamsters'),
+  );
+  
+  return $items;
+}
+
+function hamsters_list() {
+  return t('Testing.');
+}
+
+function hamsters_permission() {
+  return array(
+    'view hamsters' => array(
+      'title' => t('View Hamsters'),
+      'description' => t('View information about hamsters in the database.'),
+    ),
+  );
+}
