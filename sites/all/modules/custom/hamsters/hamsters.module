@@ -36,7 +36,7 @@ function hamsters_list() {
       $record->gender,
       t('@weight g', array('@weight' => $record->weight)),
       format_date($record->birthdate, 'custom', 'm/d/Y'),
-      theme('image', array('path' => file_build_uri($record->image))),
+      theme('image_style', array('path' => file_build_uri($record->image), 'style_name' => 'thumbnail')),
       $record->habitat_name,
     );
     $rows[] = $row;
