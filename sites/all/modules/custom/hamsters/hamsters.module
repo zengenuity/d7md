@@ -28,6 +28,7 @@ function hamsters_list() {
   
   $results = db_query("SELECT h.*, hh.name as habitat_name FROM {hamsters} h
                        LEFT JOIN {hamsters_habitat} hh ON h.habitat_id = hh.id");
+  
   foreach ($results as $record) {
     $row = array(
       $record->id,
@@ -35,7 +36,7 @@ function hamsters_list() {
       $record->gender,
       t('@weight g', array('@weight' => $record->weight)),
       format_date($record->birthdate, 'custom', 'm/d/Y'),
-      $record->image,
+      theme('image', array('path' => file_build_uri($record->image))),
       $record->habitat_name,
     );
     $rows[] = $row;
