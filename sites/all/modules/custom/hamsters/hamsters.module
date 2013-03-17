@@ -15,12 +15,23 @@ function hamsters_menu() {
 
 function hamsters_list() {
   $output = '';
+  $header = array(
+    t('ID'),
+    t('Name'),
+    t('Gender'),
+  );
+  $rows = array();
   
   $results = db_query("SELECT * FROM {hamsters}");
-  
   foreach ($results as $record) {
-    $output .= $record->id . ' | ' . $record->name . ' | ' . $record->gender . '<br />';
+    $row = array(
+      $record->id,
+      $record->name,
+      $record->gender,
+    );
+    $rows[] = $row;
   }
+  $output .= theme('table', array('header' => $header, 'rows' => $rows));
   
   return $output;
 }
