@@ -24,7 +24,16 @@ function hamsters_menu() {
 function hamsters_page($hamster) {
   $output = '<div class="hamster-page">';
   
+  if (!empty($hamster->image)) {
+    $output .= '<div>' . theme('image_style', array('path' => file_build_uri($hamster->image), 'style_name' => 'large')) . '</div>';
+  }
   $output .= '<label class="inline">' . t('ID') . ':</label>' . $hamster->id;
+  $output .= '<label class="inline">' . t('Gender') . ':</label>' . $hamster->gender;
+  $output .= '<label class="inline">' . t('Weight') . ':</label>' . t('@weight g', array('@weight' => $hamster->weight));
+  $output .= '<label class="inline">' . t('Birth Date') . ':</label>' . format_date($hamster->birthdate, 'custom', 'm/d/Y');
+  $age = REQUEST_TIME - $hamster->birthdate;
+  $output .= '<label class="inline">' . t('Age') . ':</label>' . format_interval($age, 2);
+  $output .= '<label class="inline">' . t('Habitat') . ':</label>' . $hamster->habitat_name;
   
   $output .= '</div>';
   return $output;
