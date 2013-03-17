@@ -18,7 +18,28 @@ function hamsters_menu() {
     'access arguments' => array('view hamsters'),
   );
   
+  $items['hamsters/insert'] = array(
+    'title' => 'DB Insert',
+    'page callback' => 'hamsters_insert',
+    'access arguments' => array('edit hamsters'),
+  );
+  
   return $items;
+}
+
+function hamsters_insert() {
+  db_query("INSERT INTO {hamsters} (name, gender, weight, birthdate, image, habitat_id) 
+            VALUES (:name, :gender, :weight, :birth, :image, :habitat)", 
+    array(
+      ':name' => 'Test',
+      ':gender' => 'male',
+      ':weight' => 150,
+      ':birth' => REQUEST_TIME,
+      ':image' => '',
+      ':habitat' => 3,
+    )
+  );
+  return t('Done');
 }
 
 function hamsters_theme() {
@@ -89,7 +110,7 @@ function hamsters_list() {
       $record->gender,
       t('@weight g', array('@weight' => $record->weight)),
       format_date($record->birthdate, 'custom', 'm/d/Y'),
-      theme('image_style', array('path' => file_build_uri($record->image), 'style_name' => 'thumbnail')),
+      !empty($record->image) ? theme('image_style', array('path' => file_build_uri($record->image), 'style_name' => 'thumbnail')) : '&nbsp',
       $record->habitat_name,
     );
     $rows[] = $row;
@@ -106,6 +127,10 @@ function hamsters_permission() {
     'view hamsters' => array(
       'title' => t('View Hamsters'),
       'description' => t('View information about hamsters in the database.'),
+    ),
+    'edit hamsters' => array(
+      'title' => t('Edit Hamsters'),
+      'description' => t('Edit information about hamsters in the database.'),
     ),
   );
 }
