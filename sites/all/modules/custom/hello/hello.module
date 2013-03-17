@@ -47,7 +47,8 @@ function hello_block_view($delta = '') {
         $greeting = 'Good evening @name!';
       }
       
-      $block['content'] = t($greeting, array('@name' => $GLOBALS['user']->name));
+      $name = user_is_logged_in() ? $GLOBALS['user']->name : t('world');
+      $block['content'] = t($greeting, array('@name' => $name));
      
       break;
       
