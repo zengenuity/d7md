@@ -49,8 +49,61 @@ function hamsters_menu() {
     'access arguments' => array('view hamsters'),
   );
   
+  $items['hamsters-oo/insert'] = array(
+    'title' => 'DB Insert',
+    'page callback' => 'hamsters_oo_insert',
+    'access arguments' => array('edit hamsters'),
+  );
+  
+  $items['hamsters-oo/update'] = array(
+    'title' => 'DB Update',
+    'page callback' => 'hamsters_oo_update',
+    'access arguments' => array('edit hamsters'),
+  );
+  
+  $items['hamsters-oo/delete'] = array(
+    'title' => 'DB Delete',
+    'page callback' => 'hamsters_oo_delete',
+    'access arguments' => array('edit hamsters'),
+  );
+  
   
   return $items;
+}
+
+function hamsters_oo_delete() {
+  db_query("DELETE FROM {hamsters} WHERE name = :name", 
+    array(
+      ':name' => 'Test',
+    )
+  );
+  return t('Deleted');
+}
+
+
+function hamsters_oo_update() {
+  db_query("UPDATE {hamsters} SET habitat_id = :habitat WHERE name = :name", 
+    array(
+      ':name' => 'Test',
+      ':habitat' => 1,
+    )
+  );
+  return t('Updated');
+}
+
+function hamsters_oo_insert() {
+  db_insert('hamsters')
+    ->fields(array(
+      'name' => 'Test',
+      'gender' => 'male',
+      'weight' => 150,
+      'birthdate' => REQUEST_TIME,
+      'image' => '',
+      'habitat_id' => 3,
+  ))
+  ->execute();
+
+  return t('Done');
 }
 
 function hamsters_oo_list($gender = NULL) {
