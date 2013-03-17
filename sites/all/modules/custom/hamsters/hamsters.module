@@ -14,7 +14,15 @@ function hamsters_menu() {
 }
 
 function hamsters_list() {
-  return t('Testing.');
+  $output = '';
+  
+  $results = db_query("SELECT * FROM {hamsters}");
+  
+  foreach ($results as $record) {
+    $output .= $record->id . ' | ' . $record->name . ' | ' . $record->gender . '<br />';
+  }
+  
+  return $output;
 }
 
 function hamsters_permission() {
