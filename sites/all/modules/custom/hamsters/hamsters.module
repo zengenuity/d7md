@@ -82,12 +82,13 @@ function hamsters_oo_delete() {
 
 
 function hamsters_oo_update() {
-  db_query("UPDATE {hamsters} SET habitat_id = :habitat WHERE name = :name", 
-    array(
-      ':name' => 'Test',
-      ':habitat' => 1,
-    )
-  );
+  db_update('hamsters') 
+    ->fields(array(
+      'habitat_id' => 1,
+    ))
+    ->condition('name', 'Test', '=')
+    ->execute();
+  
   return t('Updated');
 }
 
