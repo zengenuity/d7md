@@ -22,18 +22,19 @@ function hamsters_menu() {
 }
 
 function hamsters_page($hamster) {
+  drupal_add_css(drupal_get_path('module', 'hamsters') . '/hamsters.css');
   $output = '<div class="hamster-page">';
   
   if (!empty($hamster->image)) {
     $output .= '<div>' . theme('image_style', array('path' => file_build_uri($hamster->image), 'style_name' => 'large')) . '</div>';
   }
-  $output .= '<label class="inline">' . t('ID') . ':</label>' . $hamster->id;
-  $output .= '<label class="inline">' . t('Gender') . ':</label>' . $hamster->gender;
-  $output .= '<label class="inline">' . t('Weight') . ':</label>' . t('@weight g', array('@weight' => $hamster->weight));
-  $output .= '<label class="inline">' . t('Birth Date') . ':</label>' . format_date($hamster->birthdate, 'custom', 'm/d/Y');
+  $output .= '<div><label class="inline">' . t('ID') . ':</label>' . $hamster->id . '</div>';
+  $output .= '<div><label class="inline">' . t('Gender') . ':</label>' . $hamster->gender . '</div>';
+  $output .= '<div><label class="inline">' . t('Weight') . ':</label>' . t('@weight g', array('@weight' => $hamster->weight)). '</div>';
+  $output .= '<div><label class="inline">' . t('Birth Date') . ':</label>' . format_date($hamster->birthdate, 'custom', 'm/d/Y'). '</div>';
   $age = REQUEST_TIME - $hamster->birthdate;
-  $output .= '<label class="inline">' . t('Age') . ':</label>' . format_interval($age, 2);
-  $output .= '<label class="inline">' . t('Habitat') . ':</label>' . $hamster->habitat_name;
+  $output .= '<div><label class="inline">' . t('Age') . ':</label>' . format_interval($age, 2) . '</div>';
+  $output .= '<div><label class="inline">' . t('Habitat') . ':</label>' . $hamster->habitat_name . '</div>';
   
   $output .= '</div>';
   return $output;
@@ -68,7 +69,7 @@ function hamsters_list() {
   foreach ($results as $record) {
     $row = array(
       $record->id,
-      $record->name,
+      l($record->name, 'hamsters/' . $record->id),
       $record->gender,
       t('@weight g', array('@weight' => $record->weight)),
       format_date($record->birthdate, 'custom', 'm/d/Y'),
