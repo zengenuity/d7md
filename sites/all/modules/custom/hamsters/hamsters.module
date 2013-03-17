@@ -42,10 +42,18 @@ function hamsters_menu() {
     'access arguments' => array('view hamsters'),
   );
   
+  $items['hamsters-oo/%'] = array(
+    'title' => 'Hamsters',
+    'page callback' => 'hamsters_oo_list',
+    'page arguments' => array(1),
+    'access arguments' => array('view hamsters'),
+  );
+  
+  
   return $items;
 }
 
-function hamsters_oo_list() {
+function hamsters_oo_list($gender = NULL) {
   $output = '';
   $header = array(
     t('ID'),
@@ -64,6 +72,11 @@ function hamsters_oo_list() {
   $query->addField('hh', 'name', 'habitat_name');
   $query->orderBy('h.id');
   $query = $query->extend('PagerDefault')->limit(10);
+  
+  if (!empty($gender)) {
+    $query->condition('h.gender', $gender, '=');
+  }
+  
   $results = $query->execute();
   
   foreach ($results as $record) {
