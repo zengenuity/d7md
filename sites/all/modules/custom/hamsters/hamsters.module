@@ -30,8 +30,24 @@ function hamsters_menu() {
     'access arguments' => array('edit hamsters'),
   );
   
+  $items['hamsters/delete'] = array(
+    'title' => 'DB Delete',
+    'page callback' => 'hamsters_delete',
+    'access arguments' => array('edit hamsters'),
+  );
+  
   return $items;
 }
+
+function hamsters_delete() {
+  db_query("DELETE FROM {hamsters} WHERE name = :name", 
+    array(
+      ':name' => 'Test',
+    )
+  );
+  return t('Deleted');
+}
+
 
 function hamsters_update() {
   db_query("UPDATE {hamsters} SET habitat_id = :habitat WHERE name = :name", 
