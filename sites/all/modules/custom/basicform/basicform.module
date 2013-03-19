@@ -62,3 +62,7 @@ function basicform_example_form_validate($form, &$form_state) {
     form_set_error('email', t('Please enter a valid email address.'));
   }
 }
+
+function basicform_example_form_submit($form, &$form_state) {
+  drupal_set_message('Thank you for submitting the form');
+}
