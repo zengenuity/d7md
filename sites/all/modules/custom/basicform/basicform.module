@@ -1,0 +1,52 @@
+<?php
+
+function basicform_menu() {
+  $items = array(); 
+  
+  $items['basicform'] = array(
+    'title' => 'Basic Form Example',
+    'page callback' => 'basicform_example_page',
+    'access arguments' => array('access content'),
+  );
+  
+  return $items;
+}
+
+function basicform_example_page() {
+  
+  $form = drupal_get_form('basicform_example_form');
+  $output = drupal_render($form);
+  
+  return $output;
+}
+
+function basicform_example_form($form, &$form_state) {
+  $form['name'] = array(
+    '#title' => t('Name'),
+    '#type' => 'textfield',
+    '#required' => TRUE,
+  );
+  
+  $form['email'] = array(
+    '#title' => t('Email'),
+    '#type' => 'textfield',
+    '#required' => TRUE,
+  );
+  
+  $form['phone'] = array(
+    '#title' => t('Phone'),
+    '#type' => 'textfield',
+  );
+  
+  $form['message'] = array(
+    '#title' => t('Message'),
+    '#type' => 'textarea',
+  );
+  
+  $form['send'] = array(
+    '#type' => 'submit',
+    '#value' => t('Send Feedback'),
+  );
+  
+  return $form;
+}
