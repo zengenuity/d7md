@@ -36,6 +36,7 @@ function basicform_example_form($form, &$form_state) {
   $form['phone'] = array(
     '#title' => t('Phone'),
     '#type' => 'textfield',
+    '#required' => TRUE,
   );
   
   $form['message'] = array(
@@ -49,4 +50,12 @@ function basicform_example_form($form, &$form_state) {
   );
   
   return $form;
+}
+
+function basicform_example_form_validate($form, &$form_state) {
+  $phone_number = $form_state['values']['phone'];
+  $phone_number = preg_replace('/[^0-9]/', '', $phone_number);
+  if (strlen($phone_number) < 10) {
+    form_set_error('phone', t('Please enter a complete phone number, with area code.'));
+  }
 }
