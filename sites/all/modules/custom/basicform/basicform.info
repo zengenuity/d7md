@@ -1,5 +1,0 @@
-name = Basic Form Example
-description = A simple example of how to create, validate, and process a form in Drupal
-core = 7.x
-version = 7.x-0.1
-package = DrupalTutor
