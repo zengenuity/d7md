@@ -1,0 +1,5 @@
+name = File Demo
+description = Example of how to handle file uploads in Drupal
+core = 7.x
+version = 7.x-0.1
+package = DrupalTutor
