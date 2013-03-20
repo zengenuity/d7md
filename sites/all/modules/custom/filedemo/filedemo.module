@@ -41,6 +41,7 @@ function filedemo_form_submit($form, &$form_state) {
   
   
   $directory = file_build_uri('filedemo');
+  dpm($directory);
   file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
   $filepath = file_unmanaged_move($_FILES['files']['tmp_name']['demo'], 
                                   file_build_uri('filedemo/' . $_FILES['files']['name']['demo']));
