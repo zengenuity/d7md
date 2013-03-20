@@ -1,0 +1,247 @@
+<?php
+
+function kitchen_sink_menu() {
+  $items = array();
+  
+  $items['kitchen-sink'] = array(
+    'title' => 'Kitchen Sink Form Example',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('kitchen_sink_example_form'),
+    'access arguments' => array('access content'),
+  );
+  
+  $items['kitchen-sink/autohamster'] = array(
+    'page callback' => 'kitchen_sink_autocomplete_hamster',
+    'access arguments' => array('access content'),
+  );
+  
+  return $items;
+}
+
+function kitchen_sink_example_form($form, &$form_state) {
+  
+  $form['name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Name'),
+    '#required' => TRUE,
+    '#default_value' => !empty($GLOBALS['user']->name) ? $GLOBALS['user']->name : '',
+    '#weight' => -2,
+  );
+  
+  $form['group_one'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Group One'),
+  );
+  
+  $departments = array(
+    ''        => t('--Select a Department--'),
+    'service' => t('Customer Service'),
+    'hr'      => t('Human Resources'),
+    'it'      => t('Information Technology'),
+    'sales'   => t('Sales'),
+  );
+  $form['group_one']['department'] = array(
+    '#type' => 'select',
+    '#title' => t('Department'),
+    '#options' => $departments,
+    '#default_value' => 'it',
+    '#description' => t('Please enter a message here for us to read.'),
+  );
+  
+  $form['group_one']['department_multi'] = array(
+    '#type' => 'select',
+    '#title' => t('Departments (Multiselect)'),
+    '#options' => $departments,
+    '#multiple' => TRUE,
+    '#default_value' => array('it', 'service'),
+  );
+  
+  $intervals = array(
+    'hourly'  => t('Hourly'),
+    'daily'   => t('Daily'),
+    'weekly'  => t('Weekly'),
+    'monthly' => t('Monthly'),
+  );
+  
+  $form['group_one']['receive_updates'] = array(
+    '#type' => 'checkboxes',
+    '#title' => t('Receive Updates'),
+    '#options' => $intervals,
+    '#default_value' => array('daily'),
+  );
+  
+  $form['group_two'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Group Two'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+  
+  $form['group_two']['subscribe'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Subscribe to our newsletter'),
+    '#default_value' => TRUE,
+  );
+  
+  $form['group_two']['gender'] = array(
+    '#type' => 'radios',
+    '#title' => t('Gender'),
+    '#options' => array('male' => t('Male'), 'female' => t('Female')),
+  );
+  
+  $form['group_two']['message'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Message'),
+    '#rows' => 5,
+    '#description' => t('Please enter a message here for us to read.'),
+  );
+  
+  $form['group_three'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Group Three'),
+  );
+  
+  $form['group_three']['username'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Username'),
+    '#maxlength' => 10,
+    '#size' => 30,
+    '#attributes' => array('class' => array('kitchen-sink-highlight', 'some-other-class')),
+    '#description' => t('Your username can be a maximum of 10 characters.'),
+  );
+  
+  $form['group_three']['password'] = array(
+    '#type' => 'password',
+    '#title' => t('Simple Password'),
+    '#description' => t('Please enter a password'),
+  );
+  
+  $form['group_three']['password_two'] = array(
+    '#type' => 'password_confirm',
+    '#title' => t('Password (with confirm)'),
+  );
+  
+  $form['group_four'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Group Four'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  
+  $form['group_four']['total'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Total'),
+    '#field_prefix' => '$',
+    '#size' => 10,
+  );
+  
+  $form['group_four']['amount'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Amount'),
+    '#field_suffix' => 'grams',
+    '#size' => 10,
+    '#weight' => -1,
+  );
+  
+  $form['group_four']['order_notes'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Order Notes'),
+    '#prefix' => '<p>' . t('Enter any order notes below.') . '</p>',
+    '#suffix' => '<p>' . t('Enter any order notes above.') . '</p>',
+  );
+  
+  $form['group_five'] = array(
+    '#tree' => TRUE,
+  );
+  
+  $form['group_five']['disabled_text'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Disabled Text'),
+    '#default_value' => t('This is some default text.'),
+    '#disabled' => TRUE,
+  );
+  
+  $form['group_five']['readonly_text'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Read-only Text'),
+    '#default_value' => t('This is some default text.'),
+    '#attributes' => array('readonly' => 'readonly', 
+                           'class' => array('kitchen-sink-highlight', 'some-other-class')),
+  );
+  
+  $form['group_five']['secret_value'] = array(
+    '#type' => 'hidden',
+    '#value' => 'the secret password',
+  );
+  
+  $form['group_five']['supersecret_value'] = array(
+    '#type' => 'value',
+    '#value' => 'the supersecret password',
+  );
+  
+  $form['group_five']['topsecret_value'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Top Secret Password'),
+    '#default_value' => 'the top secret password',
+    '#access' => TRUE,
+  );
+  
+  $form['group_five']['user_ac'] = array(
+    '#type' => 'textfield',
+    '#title' => t('User Account'),
+    '#autocomplete_path' => 'user/autocomplete',
+  );
+  
+  $form['group_five']['custom_ac'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Custom Autocomplete'),
+    '#autocomplete_path' => 'kitchen-sink/autohamster',
+  );
+  
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Submit Form'),
+  );
+  
+  $form['othersubmit'] = array(
+    '#type' => 'submit',
+    '#value' => t('No, use me!'),
+  );
+  
+  
+  $form['finish_line'] = array(
+    '#type' => 'markup',
+    '#markup' => '<p><strong>' . t('Congratulations!') . 
+                 '</strong> ' . t('You have made it to the end of the form.') . 
+                 '</p>',
+  );
+  
+  
+  $form['#attached']['css'] = array(
+    drupal_get_path('module', 'kitchen_sink') . '/kitchen_sink.css',
+  );
+  
+ 
+    
+  return $form;
+}
+
+function kitchen_sink_autocomplete_hamster($string = '') {
+  $matches = array();
+  if ($string) {
+    $result = db_select('hamster')
+                ->fields('hamster', array('name'))
+                ->condition('name', db_like($string) . '%', 'LIKE')
+                ->range(0, 10)
+                ->execute();
+    foreach ($result as $user) {
+      $matches[$user->name] = check_plain($user->name);
+    }
+  }
+
+  drupal_json_output($matches);
+}
+
+function kitchen_sink_example_form_submit($form, &$form_state) {
+  dpm($form_state);
+}
