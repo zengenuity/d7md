@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Implementation of hook_menu().
+ */
 function hamster_menu() {
   $items = array();
   
@@ -7,6 +10,7 @@ function hamster_menu() {
     'title' => 'Hamsters',
     'page callback' => 'hamster_list',
     'access arguments' => array('view hamster'),
+    'file' => 'hamster.pages.inc',
   );
   
   $items['hamster/%hamster'] = array(
@@ -15,9 +19,51 @@ function hamster_menu() {
     'page callback' => 'hamster_page',
     'page arguments' => array(1),
     'access arguments' => array('view hamster'),
+    'file' => 'hamster.pages.inc',
   );
   
-  $items['hamster/insert'] = array(
+  $items['hamster/add'] = array(
+    'title' => 'Add Hamster',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('hamster_edit_form'),
+    'access arguments' => array('edit hamsters'),
+    'file' => 'hamster.pages.inc',
+    'type' => MENU_LOCAL_ACTION,
+  );
+  
+  $items['hamster/%hamster/edit'] = array(
+    'title' => 'Edit',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('hamster_edit_form', 1),
+    'access arguments' => array('edit hamsters'),
+    'file' => 'hamster.pages.inc',
+    'type' => MENU_LOCAL_TASK,
+  );
+  
+  $items['hamster/%hamster/view'] = array(
+    'title' => 'View',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -1,
+  );
+  
+  $items['hamster/%hamster/delete'] = array(
+    'title' => 'Delete',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('hamster_delete_form', 1),
+    'access arguments' => array('edit hamsters'),
+    'file' => 'hamster.pages.inc',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 2,
+  );
+  
+  
+  /*
+   * These menu items below are all for database demos. Not part of 
+   * hamster application. Commenting them out so they don't run.
+   */
+  /*
+   *
+   $items['hamster/insert'] = array(
     'title' => 'DB Insert',
     'page callback' => 'hamster_insert',
     'access arguments' => array('edit hamsters'),
@@ -77,14 +123,87 @@ function hamster_menu() {
     'page callback' => 'hamster_write_update',
     'access arguments' => array('edit hamsters'),
   );
-  
-  
-  
+   * 
+   */
+   
   return $items;
+}
 
+/**
+ * Implementation of hook_theme().
+ */
+function hamster_theme($existing, $type, $theme, $path) {
+  return array(
+    'hamster_info' => array(
+      'variables' => array('hamster' => NULL),
+    ),
+  );
+}
+
+/**
+ * Theme function for a full hamster page.
+ * @param array $variables
+ * @return string
+ */
+function theme_hamster_info($variables) {
+  $hamster = $variables['hamster'];
+  
+  drupal_add_css(drupal_get_path('module', 'hamster') . '/hamster.css');
+  
+  $output = '<div class="hamster-page">';
+  
+  if (!empty($hamster->image)) {
+    $image = file_load($hamster->image);
+    $output .= '<div>' . theme('image_style', array('path' => $image->uri, 'style_name' => 'large')) . '</div>';
+  }
+  $output .= '<div><label class="inline">' . t('ID') . ':</label>' . $hamster->id . '</div>';
+  $output .= '<div><label class="inline">' . t('Gender') . ':</label>' . $hamster->gender . '</div>';
+  $output .= '<div><label class="inline">' . t('Weight') . ':</label>' . t('@weight g', array('@weight' => $hamster->weight)). '</div>';
+  $output .= '<div><label class="inline">' . t('Birth Date') . ':</label>' . format_date($hamster->birthdate, 'custom', 'Y-m-d'). '</div>';
+  $age = REQUEST_TIME - $hamster->birthdate;
+  $output .= '<div><label class="inline">' . t('Age') . ':</label>' . format_interval($age, 2) . '</div>';
+  $output .= '<div><label class="inline">' . t('Habitat') . ':</label>' . $hamster->habitat_name . '</div>';
+  
+  $output .= '</div>';
+  return $output;
+}
+
+/**
+ * Hamster load function.
+ */
+function hamster_load($id) {
+  $result = db_query("SELECT h.*, hh.name AS habitat_name FROM {hamster} h
+                      LEFT JOIN {hamster_habitat} hh ON h.habitat_id = hh.id
+                      WHERE h.id = :hamster_id", array(':hamster_id' => $id))->fetchObject();
+  return $result;
+}
+
+/**
+ * Implementation of hook_permission().
+ */
+function hamster_permission() {
+  return array(
+    'view hamster' => array(
+      'title' => t('View Hamsters'),
+      'description' => t('View information about hamsters in the database.'),
+    ),
+    'edit hamsters' => array(
+      'title' => t('Edit Hamsters'),
+      'description' => t('Edit information about hamsters in the database.'),
+    ),
+  );
 }
 
 
+
+
+/*
+ * These functions below are all for database demos. Not part of 
+ * hamster application. Commenting them out.
+ */
+
+/*
+ * 
 function hamster_write_update() {
   $hamster = array(
     'id' => 1,
@@ -109,8 +228,6 @@ function hamster_write_insert() {
 
   return t('Done');
 }
-
-
 
 
 function hamster_delete() {
@@ -148,97 +265,6 @@ function hamster_insert() {
   return t('Done');
 }
 
-
-function hamster_theme($existing, $type, $theme, $path) {
-  return array(
-    'hamster_info' => array(
-      'variables' => array('hamster' => NULL),
-    ),
-  );
-}
-
-function theme_hamster_info($variables) {
-  $hamster = $variables['hamster'];
-  
-  drupal_add_css(drupal_get_path('module', 'hamster') . '/hamster.css');
-  
-  $output = '<div class="hamster-page">';
-  
-  if (!empty($hamster->image)) {
-    $output .= '<div>' . theme('image_style', array('path' => file_build_uri($hamster->image), 'style_name' => 'large')) . '</div>';
-  }
-  $output .= '<div><label class="inline">' . t('ID') . ':</label>' . $hamster->id . '</div>';
-  $output .= '<div><label class="inline">' . t('Gender') . ':</label>' . $hamster->gender . '</div>';
-  $output .= '<div><label class="inline">' . t('Weight') . ':</label>' . t('@weight g', array('@weight' => $hamster->weight)). '</div>';
-  $output .= '<div><label class="inline">' . t('Birth Date') . ':</label>' . format_date($hamster->birthdate, 'custom', 'Y-m-d'). '</div>';
-  $age = REQUEST_TIME - $hamster->birthdate;
-  $output .= '<div><label class="inline">' . t('Age') . ':</label>' . format_interval($age, 2) . '</div>';
-  $output .= '<div><label class="inline">' . t('Habitat') . ':</label>' . $hamster->habitat_name . '</div>';
-  
-  $output .= '</div>';
-  return $output;
-}
-
-
-function hamster_page($hamster) {
-  return theme('hamster_info', array('hamster' => $hamster));
-}
-
-function hamster_page_title($hamster) {
-  return $hamster->name;
-}
-
-function hamster_load($id) {
-  $result = db_query("SELECT h.*, hh.name AS habitat_name FROM {hamster} h
-                      LEFT JOIN {hamster_habitat} hh ON h.habitat_id = hh.id
-                      WHERE h.id = :hamster_id", array(':hamster_id' => $id))->fetchObject();
-  return $result;
-}
-
-function hamster_list() {
-  $output = '';
-  
-  $items_per_page = 10;
-  $total = db_query("SELECT COUNT(*) FROM {hamster}")->fetchField();
-  $page = pager_default_initialize($total, $items_per_page);
-  
-  $results = db_query_range("SELECT h.*, hh.name AS habitat_name FROM {hamster} h
-                       LEFT JOIN {hamster_habitat} hh ON h.habitat_id = hh.id", $page * $items_per_page, $items_per_page);
-  
-  $rows = array();
-  foreach ($results as $record) {
-    $row = array(
-      $record->id,
-      l($record->name, 'hamster/' . $record->id),
-      $record->gender,
-      t('@weight g', array('@weight' => $record->weight)),
-      format_date($record->birthdate, 'custom', 'Y-m-d'),
-      theme('image_style', array('style_name' => 'thumbnail', 'path' => file_build_uri($record->image))),
-      $record->habitat_name,
-    );
-    $rows[] = $row;
-  }
-  
-  $header = array(
-    t('ID'),
-    t('Name'),
-    t('Gender'),
-    t('Weight'),
-    t('Birth Date'),
-    t('Image'),
-    t('Habitat'),
-  );
-  
-  $variables = array(
-    'rows' => $rows,
-    'header' => $header,
-  );
-  
-  $output .= theme('table', $variables);
-  $output .= theme('pager');
-  
-  return $output;
-}
 
 function hamster_oo_list($gender = NULL) {
   $output = '';
@@ -323,21 +349,6 @@ function hamster_oo_insert() {
     ))
     ->execute();
   
-  
-  
   return t('Done');
 }
-
-
-function hamster_permission() {
-  return array(
-    'view hamster' => array(
-      'title' => t('View Hamsters'),
-      'description' => t('View information about hamsters in the database.'),
-    ),
-    'edit hamsters' => array(
-      'title' => t('Edit Hamsters'),
-      'description' => t('Edit information about hamsters in the database.'),
-    ),
-  );
-}
+*/
