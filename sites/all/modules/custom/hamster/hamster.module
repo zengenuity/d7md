@@ -6,12 +6,13 @@
 function hamster_menu() {
   $items = array();
   
-  $items['hamster'] = array(
+  /*$items['hamster'] = array(
     'title' => 'Hamsters',
     'page callback' => 'hamster_list',
     'access arguments' => array('view hamster'),
     'file' => 'hamster.pages.inc',
   );
+   * */
   
   $items['hamster/%hamster'] = array(
     'title callback' => 'hamster_page_title',
