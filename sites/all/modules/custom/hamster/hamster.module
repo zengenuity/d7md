@@ -129,6 +129,12 @@ function hamster_menu() {
   return $items;
 }
 
+function hamster_views_api() {
+  return array(
+    'api' => 3,
+  );
+}
+
 /**
  * Implementation of hook_theme().
  */
