@@ -160,6 +160,8 @@ function hamster_edit_form_submit($form, &$form_state) {
                                     . $hamster['birthdate']['month'] . '-' 
                                     . $hamster['birthdate']['day']);
   
+  
+  
   if (!empty($hamster['id'])) {
     drupal_write_record('hamster', $hamster, array('id'));
     drupal_set_message(t('Hamster %name updated.', array('%name' => $hamster['name'])));
@@ -167,6 +169,30 @@ function hamster_edit_form_submit($form, &$form_state) {
   else {
     drupal_write_record('hamster', $hamster);
     drupal_set_message(t('Hamster %name created.', array('%name' => $hamster['name'])));
+  }
+  
+  
+  if (!empty($hamster['image'])) {
+    $file = file_load($form_state['values']['image']);
+    $file->status = FILE_STATUS_PERMANENT;
+    file_save($file);
+    
+    $file_usage = file_usage_list($file);
+    if (empty($file_usage['hamster']['hamster'][$hamster['id']])) {
+      file_usage_add($file, 'hamster', 'hamster', $hamster['id']);
+    }
+  }
+  else {
+    // Was there a file associated with this hamster before?
+    $fid = db_query("SELECT fid FROM {file_usage} WHERE module = :module AND type = :type AND id = :id", 
+      array(':module' => 'hamster', ':type' => 'hamster', ':id' => $hamster['id']))->fetchField();
+    
+    if (!empty($fid)) {
+      // If so, clean up file.
+      $file = file_load($fid);
+      file_usage_delete($file, 'hamster');
+      file_delete($file);
+    }
   }
   
   $form_state['redirect'] = 'hamster/' . $hamster['id'];
