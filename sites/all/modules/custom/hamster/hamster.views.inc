@@ -89,6 +89,11 @@ function hamster_views_data() {
     'field' => array(
       'handler' => 'views_handler_field',
     ),
+    'relationship' => array(
+      'label' => t('Image'),
+      'base' => 'file_managed',
+      'base field' => 'fid',
+     ),
   );
   
   $data['hamster']['habitat_id'] = array(
