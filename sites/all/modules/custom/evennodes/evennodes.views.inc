@@ -1,10 +1,7 @@
 <?php
 
 function evennodes_views_query_alter(&$view, &$query) {
-  dpm($view);
-  
   if ($view->base_table == 'node') {
-    $query->add_where(1, 'node.nid', 20);
+    $query->add_where_expression(1, 'node.nid % 2 = 0');
   }
-  dpm($query);
 }
