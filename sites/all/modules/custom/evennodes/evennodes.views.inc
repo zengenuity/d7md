@@ -13,3 +13,10 @@ function evennodes_views_pre_render(&$view) {
     } 
   }
 }
+
+function evennodes_views_post_render(&$view, &$output, &$cache) {
+  if ($view->name == 'nodes_list') {
+    dpm($output);
+    $output = '<div style="background: #ff0">' . $output . '</div>';
+  }
+}
