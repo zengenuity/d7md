@@ -92,14 +92,66 @@ function hamster_views_data() {
   );
   
   $data['hamster']['habitat_id'] = array(
-    'title' => t('Habitat ID'),
-    'help' => t('The image Habitat ID of the hamster.'),
+    'title' => t('Habitat'),
+    'help' => t('The Habitat of the hamster.'),
     'field' => array(
       'handler' => 'views_handler_field',
     ),
-    
+    'relationship' => array(
+      'label' => t('Habitat'),
+      'base' => 'hamster_habitat',
+      'base field' => 'id',
+     ),
   );
   
+  // Habitat Table
+  $data['hamster_habitat']['table'] = array(
+    'group' => t("Hamster Habitat"),
+    'title' => t("Hamster Habitat Information"),
+    'help' => t("Lists information about hamster cages."),
+  );
+  
+  $data['hamster_habitat']['id'] = array(
+    'title' => t('ID'),
+    'help' => t('The ID of the hamster habitat.'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_numeric',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+  );
+  
+  $data['hamster_habitat']['name'] = array(
+    'title' => t('Name'),
+    'help' => t('The name of the hamster habitat.'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_string',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+  );
+  
+  $data['hamster_habitat']['capacity'] = array(
+    'title' => t('Capacity'),
+    'help' => t('The capacity of the hamster habitat.'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_numeric',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+  );
   
   
   return $data;
