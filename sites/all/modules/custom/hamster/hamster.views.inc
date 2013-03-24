@@ -106,6 +106,10 @@ function hamster_views_data() {
     'field' => array(
       'handler' => 'views_handler_field',
     ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_in_operator',
+      'options callback' => 'hamster_views_habitat_options',
+    ),
     'relationship' => array(
       'label' => t('Habitat'),
       'base' => 'hamster_habitat',
@@ -131,9 +135,6 @@ function hamster_views_data() {
     ),
     'sort' => array(
       'handler' => 'views_handler_sort',
-    ),
-    'argument' => array(
-      'handler' => 'views_handler_argument_numeric',
     ),
   );
   
@@ -171,4 +172,8 @@ function hamster_views_data() {
 
 function hamster_views_gender_options() {
   return array('male' => t('Male'), 'female' => t('Female'));
+}
+
+function hamster_views_habitat_options() {
+  return db_query("SELECT id, name FROM {hamster_habitat}")->fetchAllKeyed(0);
 }
