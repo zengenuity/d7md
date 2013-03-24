@@ -48,7 +48,8 @@ function hamster_views_data() {
       'handler' => 'views_handler_field',
     ),
     'filter' => array(
-      'handler' => 'views_handler_filter_string',
+      'handler' => 'views_handler_filter_in_operator',
+      'options callback' => 'hamster_views_gender_options',
     ),
     'sort' => array(
       'handler' => 'views_handler_sort',
@@ -160,4 +161,8 @@ function hamster_views_data() {
   
   
   return $data;
+}
+
+function hamster_views_gender_options() {
+  return array('male' => t('Male'), 'female' => t('Female'));
 }
