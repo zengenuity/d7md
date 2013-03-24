@@ -19,6 +19,12 @@ function hamster_views_data() {
     'field' => array(
       'handler' => 'views_handler_field_numeric',
     ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_numeric',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
   );
   
   $data['hamster']['name'] = array(
@@ -26,6 +32,12 @@ function hamster_views_data() {
     'help' => t('The name of the hamster.'),
     'field' => array(
       'handler' => 'views_handler_field',
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_string',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
     ),
   );
   
@@ -35,6 +47,12 @@ function hamster_views_data() {
     'field' => array(
       'handler' => 'views_handler_field',
     ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_string',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
   );
   
   $data['hamster']['weight'] = array(
@@ -43,6 +61,12 @@ function hamster_views_data() {
     'field' => array(
       'handler' => 'views_handler_field_numeric',
     ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_numeric',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
   );
   
   $data['hamster']['birthdate'] = array(
@@ -50,6 +74,12 @@ function hamster_views_data() {
     'help' => t('The birth date of the hamster.'),
     'field' => array(
       'handler' => 'views_handler_field_date',
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_date',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort_date',
     ),
   );
   
@@ -67,6 +97,7 @@ function hamster_views_data() {
     'field' => array(
       'handler' => 'views_handler_field',
     ),
+    
   );
   
   
