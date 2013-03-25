@@ -94,7 +94,7 @@ function hamster_edit_form($form, &$form_state, $hamster = NULL) {
     '#type' => 'textfield',
     '#title' => t('Name'),
     '#default_value' => isset($hamster->name) ? $hamster->name : NULL,
-    '#requied' => TRUE,
+    '#required' => TRUE,
   );
   
   $form['gender'] = array(
@@ -135,7 +135,7 @@ function hamster_edit_form($form, &$form_state, $hamster = NULL) {
   
   $habitats = db_query("SELECT id, name FROM {hamster_habitat}")->fetchAllKeyed(0);
   $habitats = array('' => '--Select a Habitat--') + $habitats;
-  
+
   $form['habitat_id'] = array(
     '#type' => 'select',
     '#title' => t('Habitat'),
@@ -161,12 +161,13 @@ function hamster_edit_form_submit($form, &$form_state) {
                                     . $hamster['birthdate']['day']);
   
   
-  
   if (!empty($hamster['id'])) {
+    // Existing hamster
     drupal_write_record('hamster', $hamster, array('id'));
     drupal_set_message(t('Hamster %name updated.', array('%name' => $hamster['name'])));
   }
   else {
+    // New hamster
     drupal_write_record('hamster', $hamster);
     drupal_set_message(t('Hamster %name created.', array('%name' => $hamster['name'])));
   }
@@ -217,6 +218,16 @@ function hamster_delete_form($form, &$form_state, $hamster) {
  * Hamster delete submit form.
  */
 function hamster_delete_form_submit($form, &$form_state) {
+  // Was there a file associated with this hamster ?
+  $fid = db_query("SELECT fid FROM {file_usage} WHERE module = :module AND type = :type AND id = :id", 
+    array(':module' => 'hamster', ':type' => 'hamster', ':id' => $form_state['values']['id']))->fetchField();
+    
+  if (!empty($fid)) {
+    // If so, clean up file.
+    $file = file_load($fid);
+    file_usage_delete($file, 'hamster');
+    file_delete($file);
+  }
   db_query("DELETE FROM {hamster} WHERE id = :id", array(':id' => $form_state['values']['id']));
   drupal_set_message(t('Hamster %name deleted.', array('%name' => $form_state['values']['name'])));
   $form_state['redirect'] = 'hamster';
