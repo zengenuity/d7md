@@ -154,7 +154,9 @@ function theme_hamster_info($variables) {
   
   if (!empty($hamster->image)) {
     $image = file_load($hamster->image);
-    $output .= '<div>' . theme('image_style', array('path' => $image->uri, 'style_name' => 'large')) . '</div>';
+    if (!empty($image)) {
+      $output .= '<div>' . theme('image_style', array('path' => $image->uri, 'style_name' => 'large')) . '</div>';
+    }
   }
   $output .= '<div><label class="inline">' . t('ID') . ':</label>' . $hamster->id . '</div>';
   $output .= '<div><label class="inline">' . t('Gender') . ':</label>' . $hamster->gender . '</div>';
