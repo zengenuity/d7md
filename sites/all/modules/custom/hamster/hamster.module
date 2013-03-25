@@ -6,13 +6,12 @@
 function hamster_menu() {
   $items = array();
   
-  /*$items['hamster'] = array(
+  $items['hamster'] = array(
     'title' => 'Hamsters',
     'page callback' => 'hamster_list',
     'access arguments' => array('view hamster'),
     'file' => 'hamster.pages.inc',
   );
-   * */
   
   $items['hamster/%hamster'] = array(
     'title callback' => 'hamster_page_title',
@@ -23,13 +22,10 @@ function hamster_menu() {
     'file' => 'hamster.pages.inc',
   );
   
-  $items['hamster/add'] = array(
-    'title' => 'Add Hamster',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('hamster_edit_form'),
-    'access arguments' => array('edit hamsters'),
-    'file' => 'hamster.pages.inc',
-    'type' => MENU_LOCAL_ACTION,
+  $items['hamster/%hamster/view'] = array(
+    'title' => 'View',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -1,
   );
   
   $items['hamster/%hamster/edit'] = array(
@@ -41,12 +37,6 @@ function hamster_menu() {
     'type' => MENU_LOCAL_TASK,
   );
   
-  $items['hamster/%hamster/view'] = array(
-    'title' => 'View',
-    'type' => MENU_DEFAULT_LOCAL_TASK,
-    'weight' => -1,
-  );
-  
   $items['hamster/%hamster/delete'] = array(
     'title' => 'Delete',
     'page callback' => 'drupal_get_form',
@@ -55,6 +45,15 @@ function hamster_menu() {
     'file' => 'hamster.pages.inc',
     'type' => MENU_LOCAL_TASK,
     'weight' => 2,
+  );
+  
+  $items['hamster/add'] = array(
+    'title' => 'Add Hamster',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('hamster_edit_form'),
+    'access arguments' => array('edit hamsters'),
+    'file' => 'hamster.pages.inc',
+    'type' => MENU_LOCAL_ACTION,
   );
   
   
@@ -128,12 +127,6 @@ function hamster_menu() {
    */
    
   return $items;
-}
-
-function hamster_views_api() {
-  return array(
-    'api' => 3,
-  );
 }
 
 /**
