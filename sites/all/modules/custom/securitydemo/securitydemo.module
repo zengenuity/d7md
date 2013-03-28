@@ -19,7 +19,7 @@ function securitydemo_node_title($node) {
 }
 
 function securitydemo_node_body($node) {
-  $title = 'Title: ' . $node->title; 
+  $title = t('Title: @title', array('@title' => $node->title)); 
   
   $body = $node->body[LANGUAGE_NONE][0]['safe_value'];
   
