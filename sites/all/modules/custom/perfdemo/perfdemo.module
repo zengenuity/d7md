@@ -14,22 +14,29 @@ function perfdemo_menu() {
 
 function perfdemo_page() {
   $start = microtime(TRUE);
-  $ids = db_query("SELECT id FROM {hamster}")->fetchCol();
-  
   $count = 0;
   
-  
   for($i = 0; $i < 5; $i++) {
-    $hamsters = array();
-    foreach ($ids as $id) {
-      $hamsters[] = perfdemo_hamster_load($id);
-      $count++;
-    }
+    $count += count(perfdemo_load_all_hamsters());
   }
-  
   
   return t('Loaded @count hamsters in @time seconds.', array('@count' => $count, '@time' => microtime(TRUE) - $start));
 }
+
+/**
+ * Load all hamsters from the database and return them.
+ */
+function perfdemo_load_all_hamsters() {
+  $hamsters = array();
+  
+  $ids = db_query("SELECT id FROM {hamster}")->fetchCol();
+  foreach ($ids as $id) {
+    $hamsters[] = perfdemo_hamster_load($id);
+  }
+  
+  return $hamsters;
+}
+
 
 /**
  * Hamster load function that has been designed to be slow.
