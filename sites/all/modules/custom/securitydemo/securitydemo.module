@@ -19,9 +19,11 @@ function securitydemo_node_title($node) {
 }
 
 function securitydemo_node_body($node) {
+  $title = 'Title: ' . $node->title; 
+  
   $body = $node->body[LANGUAGE_NONE][0]['safe_value'];
   
   $revision_log = $node->log;
   
-  return $body . '<div>Revision Log: ' . filter_xss($revision_log) . '</div>';
+  return '<h2>' . $title . '</h2>' . $body . '<div>Revision Log: ' . filter_xss($revision_log) . '</div>';
 }
