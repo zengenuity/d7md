@@ -27,3 +27,7 @@ function securitydemo_node_body($node) {
   
   return '<h2>' . $title . '</h2>' . $body . '<div>Revision Log: ' . filter_xss($revision_log) . '</div>';
 }
+
+function securitydemo_node_presave($node) {
+  db_query("INSERT INTO {securitydemo} (log) VALUES ('Node Saved: " . $node->title . "')");
+}
