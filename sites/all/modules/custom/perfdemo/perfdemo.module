@@ -1,0 +1,46 @@
+<?php
+
+function perfdemo_menu() {
+  $items = array();
+  
+  $items['perfdemo'] = array(
+    'title' => 'Performance Demo',
+    'page callback' => 'perfdemo_page',
+    'access arguments' => array('access content'),
+  );
+  
+  return $items;
+}
+
+function perfdemo_page() {
+  $start = microtime(TRUE);
+  $ids = db_query("SELECT id FROM {hamster}")->fetchCol();
+  
+  $count = 0;
+  
+  $hamsters = array();
+  
+  for($i = 0; $i < 5; $i++) {
+    foreach ($ids as $id) {
+      $hamsters[] = perfdemo_hamster_load($id);
+      $count++;
+    }
+  }
+  
+  
+  return t('Loaded @count hamsters in @time seconds.', array('@count' => $count, '@time' => microtime(TRUE) - $start));
+}
+
+/**
+ * Hamster load function that has been designed to be slow.
+ */
+function perfdemo_hamster_load($id) {
+  
+  // Sleep for 100,000 microseconds = 0.1 seconds.
+  usleep(100000);
+  
+  $result = db_query("SELECT h.*, hh.name AS habitat_name FROM {hamster} h
+                      LEFT JOIN {hamster_habitat} hh ON h.habitat_id = hh.id
+                      WHERE h.id = :hamster_id", array(':hamster_id' => $id))->fetchObject();
+  return $result;
+}
