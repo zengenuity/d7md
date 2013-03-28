@@ -27,11 +27,12 @@ function perfdemo_page() {
  * Load all hamsters from the database and return them.
  */
 function perfdemo_load_all_hamsters() {
-  $hamsters = array();
-  
-  $ids = db_query("SELECT id FROM {hamster}")->fetchCol();
-  foreach ($ids as $id) {
-    $hamsters[] = perfdemo_hamster_load($id);
+  $hamsters = &drupal_static(__FUNCTION__);
+  if (!isset($hamsters)) {
+    $ids = db_query("SELECT id FROM {hamster}")->fetchCol();
+    foreach ($ids as $id) {
+      $hamsters[] = perfdemo_hamster_load($id);
+    }
   }
   
   return $hamsters;
