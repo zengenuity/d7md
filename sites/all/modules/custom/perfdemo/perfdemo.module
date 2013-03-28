@@ -14,18 +14,24 @@ function perfdemo_menu() {
 
 function perfdemo_page() {
   $start = microtime(TRUE);
-  $count = 0;
-  
-  $all_the_hamsters = array();
-  
-  $ids = db_query("SELECT id FROM {hamster}")->fetchCol();
-    
-  for($i = 0; $i < 5; $i++) {
-    foreach ($ids as $id) {
-      $all_the_hamsters[$id] = perfdemo_hamster_load($id);
-      $count++;
-    }
+
+  $hamster_list_cache = cache_get('perfdemo:hamsters:list');
+  if (!empty($hamster_list_cache)) {
+    $all_the_hamsters = $hamster_list_cache->data;
   }
+  else {
+    $ids = db_query("SELECT id FROM {hamster}")->fetchCol();
+    
+    for($i = 0; $i < 5; $i++) {
+      foreach ($ids as $id) {
+        $all_the_hamsters[] = perfdemo_hamster_load($id);
+      }
+    }
+    cache_set('perfdemo:hamsters:list', $all_the_hamsters);
+  }
+  
+  $count = count($all_the_hamsters);
+  dpm($all_the_hamsters);
   
   return t('Loaded @count hamsters in @time seconds.', array('@count' => $count, '@time' => microtime(TRUE) - $start));
 }
