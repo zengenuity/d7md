@@ -1,0 +1,5 @@
+name = Node Hook Examples
+description = Examples of implementing node lifecycle hooks
+core = 7.x
+package = DrupalTutor
+version = 7.x-0.1
