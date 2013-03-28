@@ -19,5 +19,9 @@ function securitydemo_node_title($node) {
 }
 
 function securitydemo_node_body($node) {
-  return $node->body[LANGUAGE_NONE][0]['safe_value'];
+  $body = $node->body[LANGUAGE_NONE][0]['safe_value'];
+  
+  $revision_log = $node->log;
+  
+  return $body . '<div>Revision Log: ' . $revision_log . '</div>';
 }
