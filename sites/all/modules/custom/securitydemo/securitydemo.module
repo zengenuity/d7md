@@ -23,5 +23,5 @@ function securitydemo_node_body($node) {
   
   $revision_log = $node->log;
   
-  return $body . '<div>Revision Log: ' . check_plain($revision_log) . '</div>';
+  return $body . '<div>Revision Log: ' . check_markup($revision_log) . '</div>';
 }
