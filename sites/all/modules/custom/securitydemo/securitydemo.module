@@ -29,5 +29,5 @@ function securitydemo_node_body($node) {
 }
 
 function securitydemo_node_presave($node) {
-  db_query("INSERT INTO {securitydemo} (log) VALUES ('Node Saved: " . $node->title . "')");
+  db_query("INSERT INTO {securitydemo} (log) VALUES (:message)", array(':message' => 'Node Saved: ' . $node->title));
 }
