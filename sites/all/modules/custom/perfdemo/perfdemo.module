@@ -16,11 +16,13 @@ function perfdemo_page() {
   $start = microtime(TRUE);
   $count = 0;
   
+  $all_the_hamsters = array();
+  
   $ids = db_query("SELECT id FROM {hamster}")->fetchCol();
     
   for($i = 0; $i < 5; $i++) {
     foreach ($ids as $id) {
-      $hamster = perfdemo_hamster_load($id);
+      $all_the_hamsters[$id] = perfdemo_hamster_load($id);
       $count++;
     }
   }
