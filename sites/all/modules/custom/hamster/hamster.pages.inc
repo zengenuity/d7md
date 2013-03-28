@@ -18,7 +18,7 @@ function hamster_page_title($hamster) {
 /**
  * Page callback that lists all hamsters in the database.
  */
-function hamster_list() {
+/*function hamster_list() {
   $output = '';
   
   $items_per_page = 10;
@@ -78,7 +78,7 @@ function hamster_list() {
   $output .= theme('pager');
   
   return $output;
-}
+}*/
 
 /**
  * Hamster add/edit form.
