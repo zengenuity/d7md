@@ -13,7 +13,7 @@ function nodehooks_node_load($nodes, $types) {
       $nodes[$nid]->nodehooks_title = ucfirst(__nodehooks_translate_to_pig_latin(strtolower($node->title)));
     }
   }
-  // dpm($nodes);
+  //dpm($nodes);
   // dpm($types);
 }
 
@@ -27,9 +27,10 @@ function nodehooks_node_load($nodes, $types) {
 function nodehooks_node_view($node, $view_mode, $langcode) {
   if ($view_mode == 'full' && !empty($node->nodehooks_title)) {
     $node->content['nodehooks'] = array(
-      '#markup' => '<div class="nodehooks"><strong>' . t('Pig Latin Title') . ':</strong> ' . $node->nodehooks_title . '</div>',
+      '#markup' => '<div class="nodehooks"><strong>' . t('Pig Latin Title') . ':</strong> ' . check_plain($node->nodehooks_title) . '</div>',
       '#weight' => 100,
     );
+    // dpm($node);
   }
 }
 

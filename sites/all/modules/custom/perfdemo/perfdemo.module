@@ -14,27 +14,37 @@ function perfdemo_menu() {
 
 function perfdemo_page() {
   $start = microtime(TRUE);
-
-  $hamster_list_cache = cache_get('perfdemo:hamsters:list');
-  if (!empty($hamster_list_cache)) {
-    $all_the_hamsters = $hamster_list_cache->data;
-  }
-  else {
-    $ids = db_query("SELECT id FROM {hamster}")->fetchCol();
-    
-    for($i = 0; $i < 5; $i++) {
-      foreach ($ids as $id) {
-        $all_the_hamsters[] = perfdemo_hamster_load($id);
-      }
-    }
-    cache_set('perfdemo:hamsters:list', $all_the_hamsters);
-  }
+  $count = 0;
   
-  $count = count($all_the_hamsters);
-  dpm($all_the_hamsters);
+  for($i = 0; $i < 5; $i++) {
+    $count += count(perfdemo_load_all_hamsters());
+  }
   
   return t('Loaded @count hamsters in @time seconds.', array('@count' => $count, '@time' => microtime(TRUE) - $start));
 }
+
+/**
+ * Load all hamsters from the database and return them.
+ */
+function perfdemo_load_all_hamsters() {
+  
+  $hamster_list_cache = cache_get('perfdemo:hamsters:list');
+  if (!empty($hamster_list_cache)) {
+    $hamsters = $hamster_list_cache->data;
+  }
+  else {
+    $hamsters = array();
+    $ids = db_query("SELECT id FROM {hamster}")->fetchCol();
+    foreach ($ids as $id) {
+      $hamsters[] = perfdemo_hamster_load($id);
+    }
+    cache_set('perfdemo:hamsters:list', $hamsters);
+  }
+
+  
+  return $hamsters;
+}
+
 
 /**
  * Hamster load function that has been designed to be slow.
@@ -42,10 +52,10 @@ function perfdemo_page() {
 function perfdemo_hamster_load($id) {
   $hamsters = &drupal_static(__FUNCTION__);
   
-  // Only load hamster if I haven't already done it this page load.
   if (!isset($hamsters[$id])) {
     // Sleep for 100,000 microseconds = 0.1 seconds.
     usleep(100000);
+  
     $hamsters[$id] = db_query("SELECT h.*, hh.name AS habitat_name FROM {hamster} h
                                LEFT JOIN {hamster_habitat} hh ON h.habitat_id = hh.id
                                WHERE h.id = :hamster_id", array(':hamster_id' => $id))->fetchObject();

@@ -19,15 +19,15 @@ function securitydemo_node_title($node) {
 }
 
 function securitydemo_node_body($node) {
-  $title = t('Title: @title', array('@title' => $node->title)); 
-  
+  $title = t('Title: @title', array('@title' => $node->title));
   $body = $node->body[LANGUAGE_NONE][0]['safe_value'];
   
   $revision_log = $node->log;
-  
+  dpm($node);
   return '<h2>' . $title . '</h2>' . $body . '<div>Revision Log: ' . filter_xss($revision_log) . '</div>';
 }
 
 function securitydemo_node_presave($node) {
-  db_query("INSERT INTO {securitydemo} (log) VALUES (:message)", array(':message' => 'Node Saved: ' . $node->title));
+  db_query("INSERT INTO {securitydemo} (log) VALUES (:message)", 
+    array(':message' => $node->title));
 }
