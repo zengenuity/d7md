@@ -8,7 +8,7 @@
 /**
  * Maximum length of username text field.
  */
-define('USERNAME_MAX_LENGTH', 60);
+define('USERNAME_MAX_LENGTH', 10);
 
 /**
  * Maximum length of user e-mail text field.
@@ -60,7 +60,7 @@ function user_help($path, $arg) {
       $output = '<p>' . t('Roles allow you to fine tune the security and administration of Drupal. A role defines a group of users that have certain privileges as defined on the <a href="@permissions">permissions page</a>. Examples of roles include: anonymous user, authenticated user, moderator, administrator and so on. In this area you will define the names and order of the roles on your site. It is recommended to order your roles from least permissive (anonymous user) to most permissive (administrator). To delete a role choose "edit role".', array('@permissions' => url('admin/people/permissions'))) . '</p>';
       $output .= '<p>' . t('By default, Drupal comes with two user roles:') . '</p>';
       $output .= '<ul>';
-      $output .= '<li>' . t("Anonymous user: this role is used for users that don't have a user account or that are not authenticated.") . '</li>';
+      $output .= '<li>' . t("Logged out users: this role is used for users that don't have a user account or that are not authenticated.") . '</li>';
       $output .= '<li>' . t('Authenticated user: this role is automatically granted to all logged in users.') . '</li>';
       $output .= '</ul>';
       return $output;

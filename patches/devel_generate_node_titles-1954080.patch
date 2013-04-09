@@ -1,0 +1,36 @@
+diff --git a/devel_generate/devel_generate.drush.inc b/devel_generate/devel_generate.drush.inc
+index 1a89caa..4ad451c 100644
+--- a/devel_generate/devel_generate.drush.inc
++++ b/devel_generate/devel_generate.drush.inc
+@@ -57,6 +57,7 @@ function devel_generate_drush_command() {
+       'feedback' => 'An integer representing interval for insertion rate logging. Defaults to 1000',
+       'skip-fields' => 'A comma delimited list of fields to omit when generating random values',
+       'languages' => 'A comma-separated list of language codes',
++      'node-titles' => 'A comma-separated list of node titles',
+     ),
+     'aliases' => array('genc'),
+   );
+@@ -152,6 +153,9 @@ function drush_devel_generate_content($num_nodes = NULL, $max_comments = NULL) {
+     $values['values']['add_language'] = array_intersect($add_language, array_keys(locale_language_list()));
+   }
+ 
++  $titles = drush_get_option('node-titles');
++  $values['values']['titles'] = !empty($titles) ? explode(",", $titles) : array();
++
+   // Load user 1; is needed for creating *published* comments.
+   if ($max_comments) {
+     global $user;
+diff --git a/devel_generate/devel_generate.inc b/devel_generate/devel_generate.inc
+index 67c9e4d..ee1f8a0 100644
+--- a/devel_generate/devel_generate.inc
++++ b/devel_generate/devel_generate.inc
+@@ -136,6 +136,9 @@ function devel_generate_content($form_state) {
+     devel_generate_content_pre_node($form_state['values']);
+     $start = time();
+     for ($i = 1; $i <= $form_state['values']['num_nodes']; $i++) {
++      if (isset($form_state['values']['titles'][$i-1])) {
++        $form_state['values']['title'] = $form_state['values']['titles'][$i-1];
++      }
+       devel_generate_content_add_node($form_state['values']);
+       if (function_exists('drush_log') && $i % drush_get_option('feedback', 1000) == 0) {
+         $now = time();
