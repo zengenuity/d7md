@@ -24,7 +24,7 @@ function agreetopost_form_alter(&$form, &$form_state, $form_id) {
     $form['#validate'][] = 'agreetopost_node_validate_form';
     array_unshift($form['actions']['submit']['#submit'], 'agreetopost_node_submit_form');
     
-    dpm($form);
+    // dpm($form);
   }
 }
 

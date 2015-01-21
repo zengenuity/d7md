@@ -73,7 +73,7 @@ function hello_menu_show_variable_title($variable_name) {
 
 function hello_menu_show_variable($variable_name) {
   $value = variable_get($variable_name, t('No value for this variable.'));
-  return $value;
+  return (string) $value;
 }
 
 function hello_menu_list_variables() {

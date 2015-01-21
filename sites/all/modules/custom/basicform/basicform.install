@@ -1,0 +1,17 @@
+<?php
+
+function basicform_install() {
+  
+}
+
+function basicform_uninstall() {
+  
+}
+
+function basicform_enable() {
+  
+}
+
+function basicform_disable() {
+  
+}

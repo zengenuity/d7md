@@ -3,7 +3,7 @@
     <type>org.netbeans.modules.php.project</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/php-project/1">
-            <name>Drupal 7 Module Development</name>
+            <name>d7md</name>
         </data>
     </configuration>
 </project>

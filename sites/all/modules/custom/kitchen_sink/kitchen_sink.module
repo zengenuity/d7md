@@ -20,6 +20,7 @@ function kitchen_sink_menu() {
 
 function kitchen_sink_example_form($form, &$form_state) {
   
+  
   $form['name'] = array(
     '#type' => 'textfield',
     '#title' => t('Name'),
@@ -87,6 +88,12 @@ function kitchen_sink_example_form($form, &$form_state) {
     '#type' => 'radios',
     '#title' => t('Gender'),
     '#options' => array('male' => t('Male'), 'female' => t('Female')),
+    '#states' => array(
+      // Hide the settings when the cancel notify checkbox is disabled.
+      'invisible' => array(
+       ':input[name="subscribe"]' => array('checked' => FALSE),
+      ),
+     ),
   );
   
   $form['group_two']['message'] = array(
@@ -94,6 +101,11 @@ function kitchen_sink_example_form($form, &$form_state) {
     '#title' => t('Message'),
     '#rows' => 5,
     '#description' => t('Please enter a message here for us to read.'),
+    '#states' => array(
+      'required' => array(
+       ':input[name="gender"]' => array('value' => 'male'),
+      ),
+     ),
   );
   
   $form['group_three'] = array(
@@ -243,5 +255,8 @@ function kitchen_sink_autocomplete_hamster($string = '') {
 }
 
 function kitchen_sink_example_form_submit($form, &$form_state) {
-  dpm($form_state);
+  
+  $form_state['redirect'] = 'hamster';
+  
+    dpm($form_state);
 }
